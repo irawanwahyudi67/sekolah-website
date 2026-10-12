@@ -1,16 +1,31 @@
 <?php
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/database.php';
+
+$pdo = dbConnect();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
-    if (isset($users[$username]) && $users[$username] === $password) {
-        $_SESSION['user'] = $username;
-        $_SESSION['login_time'] = date('Y-m-d H:i:s');
-        redirect('dashboard.php');
+    if ($username === '' || $password === '') {
+        $error = 'Username dan password wajib diisi.';
     } else {
-        $error = 'Username atau password salah. Silakan coba lagi.';
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ? LIMIT 1');
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+
+            if (($user['role'] ?? 'user') === 'admin') {
+                redirect('admin.php');
+            }
+            redirect('dashboard.php');
+        } else {
+            $error = 'Username atau password salah.';
+        }
     }
 }
 ?>
@@ -28,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="auth-body">
-    <div class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
-        <div class="row auth-shell g-0 shadow-lg rounded-4 overflow-hidden">
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center p-4">
+        <div class="row auth-shell g-0 shadow-lg overflow-hidden">
             <div class="col-lg-6 d-none d-lg-block auth-visual">
                 <div class="auth-overlay"></div>
                 <div class="auth-visual-content text-white">
@@ -47,18 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p class="text-muted mb-0">Silakan masuk untuk melanjutkan</p>
                     </div>
 
-                    <?php if (isset($error)): ?>
-                        <div class="alert alert-danger rounded-3"><?= htmlspecialchars($error) ?></div>
+                    <?php if (!empty($error)): ?>
+                        <div class="alert alert-danger rounded-3"><?= e($error) ?></div>
                     <?php endif; ?>
 
                     <form method="POST" action="login.php" class="needs-validation" novalidate>
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Masukkan username" required autocomplete="username">
+                            <input type="text" id="username" name="username" class="form-control form-control-lg" placeholder="Masukkan username" required autocomplete="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Masukkan password" required autocomplete="current-password">
+                            <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="Masukkan password" required autocomplete="current-password">
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4 small text-muted">
                             <div class="form-check">

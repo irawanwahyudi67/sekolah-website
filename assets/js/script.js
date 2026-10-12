@@ -7,26 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    const forms = document.querySelectorAll('.needs-validation');
-    forms.forEach(form => {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        });
-    });
-
     const sectionEls = document.querySelectorAll('section[id]');
-    const navMap = new Map();
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('#')) {
-            navMap.set(href, link);
-        }
-    });
-
     const highlightNav = () => {
         const scrollY = window.scrollY + 120;
         let currentId = '#home';
@@ -40,9 +21,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         navLinks.forEach(link => {
-            const linkHref = link.getAttribute('href');
-            const active = linkHref === currentId || (currentId === '#home' && linkHref === '#home');
-            link.classList.toggle('active', active);
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                const active = href === currentId;
+                link.classList.toggle('active', active);
+            }
         });
     };
 

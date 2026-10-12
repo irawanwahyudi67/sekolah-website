@@ -1,13 +1,18 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-if (!isset($_SESSION['user'])) {
+if (!isLoggedIn()) {
     redirect('login.php');
 }
 
-$user = $_SESSION['user'];
-$loginTime = $_SESSION['login_time'] ?? 'Baru saja';
-?><!DOCTYPE html>
+$pdo = dbConnect();
+$user = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+$user->execute([$_SESSION['user_id']]);
+$userData = $user->fetch();
+
+$site = getSiteData($pdo);
+?>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +30,7 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.php">
                 <span class="brand-icon">S</span>
-                <span><?= APP_NAME ?></span>
+                <span><?= e($site['school']['school_name'] ?? APP_NAME) ?></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav" aria-controls="dashboardNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -37,7 +42,7 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
                     <li class="nav-item"><a class="nav-link" href="#">Nilai</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Berita</a></li>
                     <li class="nav-item ms-lg-3">
-                        <span class="nav-user text-white-50">Halo, <?= htmlspecialchars(strtoupper($user)) ?></span>
+                        <span class="nav-user text-white-50">Halo, <?= e(strtoupper($userData['username'] ?? 'User')) ?></span>
                     </li>
                     <li class="nav-item">
                         <a href="logout.php" class="btn btn-light btn-sm rounded-pill px-3">Keluar</a>
@@ -54,9 +59,9 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <div>
                             <p class="mb-1 text-primary fw-semibold">Selamat datang kembali</p>
-                            <h2 class="mb-0 fw-bold">Dashboard Siswa &amp; Guru</h2>
+                            <h2 class="mb-0 fw-bold">Dashboard <?= e($userData['role'] === 'admin' ? 'Admin' : 'Siswa') ?></h2>
                         </div>
-                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">Login: <?= htmlspecialchars($loginTime) ?></span>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">Login: <?= e(date('Y-m-d H:i:s')) ?></span>
                     </div>
                 </div>
             </div>
@@ -69,34 +74,15 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
         </div>
 
         <div class="row g-4 mb-4">
-            <div class="col-md-6 col-xl-3">
-                <div class="stat-card rounded-4 shadow-sm p-4">
-                    <span class="stat-label">Total Siswa</span>
-                    <h3>1.245</h3>
-                    <small class="text-success">+8.5% bulan ini</small>
+            <?php foreach ($site['stats'] as $stat): ?>
+                <div class="col-md-6 col-xl-3">
+                    <div class="stat-card rounded-4 shadow-sm p-4">
+                        <span class="stat-label"><?= e($stat['label']) ?></span>
+                        <h3><?= e($stat['number']) ?></h3>
+                        <small class="text-success">Update terbaru</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="stat-card rounded-4 shadow-sm p-4">
-                    <span class="stat-label">Rata-rata Nilai</span>
-                    <h3>89.4</h3>
-                    <small class="text-success">Naik 2.1%</small>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="stat-card rounded-4 shadow-sm p-4">
-                    <span class="stat-label">Kehadiran</span>
-                    <h3>96.8%</h3>
-                    <small class="text-success">Stabil</small>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="stat-card rounded-4 shadow-sm p-4">
-                    <span class="stat-label">Kegiatan</span>
-                    <h3>14</h3>
-                    <small class="text-success">Aktif bulan ini</small>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
 
         <div class="row g-4">
@@ -142,18 +128,12 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
             <div class="col-lg-5">
                 <div class="content-card rounded-4 shadow-sm p-4">
                     <h4 class="mb-3">Pengumuman</h4>
-                    <div class="announcement-item">
-                        <span class="tag bg-primary-subtle text-primary">Baru</span>
-                        <h6>Pendaftaran PPDB dibuka sampai 30 Agustus 2026</h6>
-                    </div>
-                    <div class="announcement-item">
-                        <span class="tag bg-warning-subtle text-warning">Prioritas</span>
-                        <h6>Pelatihan ekstrakurikuler robotika dimulai minggu depan</h6>
-                    </div>
-                    <div class="announcement-item">
-                        <span class="tag bg-success-subtle text-success">Info</span>
-                        <h6>Jadwal ujian tengah semester akan diinformasikan oleh wali kelas</h6>
-                    </div>
+                    <?php foreach (array_slice($site['news'], 0, 3) as $news): ?>
+                        <div class="announcement-item">
+                            <span class="tag bg-primary-subtle text-primary">Baru</span>
+                            <h6><?= e($news['title']) ?></h6>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

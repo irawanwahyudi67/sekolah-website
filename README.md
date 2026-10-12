@@ -1,24 +1,52 @@
-# Sekolah Pintar
+# Sekolah Pintar Premium Website
 
-Website sekolah modern dengan landing page, login, dan dashboard sederhana berbasis PHP, Bootstrap, CSS, dan JavaScript.
+Project ini adalah situs web sekolah premium dengan login admin, dashboard, dan data yang disimpan di MySQL.
 
-## Struktur Folder
-- `index.php` : landing page sekolah
-- `login.php` : halaman login
-- `dashboard.php` : halaman dashboard setelah login
-- `logout.php` : logout session
-- `config.php` : konfigurasi dasar dan data akun demo
-- `assets/css/style.css` : styling custom
-- `assets/js/script.js` : fitur ringan JavaScript
+## Fitur
+- Landing page sekolah premium modern
+- Login admin dan user
+- Dashboard pengguna
+- Admin panel untuk edit semua konten
+- Data disimpan di database MySQL
+- Responsive untuk desktop dan mobile
+
+## Persyaratan
+- PHP 8+
+- MySQL / MariaDB
+- Apache / Nginx
+- XAMPP / Laragon / WAMP
 
 ## Cara Menjalankan
-1. Siapkan server PHP lokal (XAMPP / WAMP / Laragon)
-2. Letakkan folder project di `htdocs` (XAMPP) atau folder web server Anda
-3. Buka browser ke `http://localhost/sekolah-website/`
+1. Buat database MySQL dengan nama `sekolah_pintar`
+2. Pastikan MySQL berjalan di localhost dengan user `root` dan password kosong
+3. Copy semua file ke folder web server Anda (contoh: `htdocs/sekolah-website`)
+4. Jalankan browser:
+   `http://localhost/sekolah-website/index.php`
+5. Login:
+   - Admin: `admin` / `admin123`
+   - User: `siswa` / `siswa123`
 
-## Akun Demo Login
-- Username: `admin`  | Password: `admin123`
-- Username: `siswa`  | Password: `siswa123`
+## Admin Panel
+- Akses: `http://localhost/sekolah-website/admin.php`
+- Login admin hanya bisa menggunakan akun admin.
 
-## Catatan
-Project ini dibuat sebagai prototype desain website sekolah yang menarik dan siap dikembangkan lebih lanjut dengan database MySQL.
+## Struktur Proyek
+```bash
+sekolah-website/
+├── admin.php
+├── config.php
+├── database.php
+├── dashboard.php
+├── index.php
+├── login.php
+├── logout.php
+├── assets/
+│   ├── css/style.css
+│   └── js/script.js
+├── README.md
+└── .gitignore
+```
+
+## Zip Download
+Github branch ZIP:
+https://github.com/irawanwahyudi67/sekolah-website/archive/refs/heads/improve-design.zip
