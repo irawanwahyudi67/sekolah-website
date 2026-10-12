@@ -17,4 +17,35 @@ document.addEventListener('DOMContentLoaded', function () {
             form.classList.add('was-validated');
         });
     });
+
+    const sectionEls = document.querySelectorAll('section[id]');
+    const navMap = new Map();
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            navMap.set(href, link);
+        }
+    });
+
+    const highlightNav = () => {
+        const scrollY = window.scrollY + 120;
+        let currentId = '#home';
+
+        sectionEls.forEach(section => {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            if (scrollY >= top && scrollY < top + height) {
+                currentId = '#' + section.id;
+            }
+        });
+
+        navLinks.forEach(link => {
+            const linkHref = link.getAttribute('href');
+            const active = linkHref === currentId || (currentId === '#home' && linkHref === '#home');
+            link.classList.toggle('active', active);
+        });
+    };
+
+    highlightNav();
+    window.addEventListener('scroll', highlightNav, { passive: true });
 });

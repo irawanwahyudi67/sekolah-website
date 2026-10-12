@@ -17,15 +17,17 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="dashboard-body">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.php">
-                <span class="brand-icon">S</span> <?= APP_NAME ?>
+                <span class="brand-icon">S</span>
+                <span><?= APP_NAME ?></span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav" aria-controls="dashboardNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="dashboardNav">
@@ -52,7 +54,7 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <div>
                             <p class="mb-1 text-primary fw-semibold">Selamat datang kembali</p>
-                            <h2 class="mb-0 fw-bold">Dashboard Siswa & Guru</h2>
+                            <h2 class="mb-0 fw-bold">Dashboard Siswa &amp; Guru</h2>
                         </div>
                         <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">Login: <?= htmlspecialchars($loginTime) ?></span>
                     </div>
@@ -136,6 +138,7 @@ $loginTime = $_SESSION['login_time'] ?? 'Baru saja';
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-5">
                 <div class="content-card rounded-4 shadow-sm p-4">
                     <h4 class="mb-3">Pengumuman</h4>

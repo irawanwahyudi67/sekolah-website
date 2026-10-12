@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="auth-body">
@@ -32,11 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-lg-6 d-none d-lg-block auth-visual">
                 <div class="auth-overlay"></div>
                 <div class="auth-visual-content text-white">
-                    <span class="badge bg-light text-primary rounded-pill px-3 py-2 mb-3">Portal Sekolah</span>
+                    <span class="badge bg-light text-primary rounded-pill px-3 py-2 mb-3 fw-semibold">Portal Sekolah</span>
                     <h2>Selamat Datang di <?= APP_NAME ?></h2>
                     <p>Masuk untuk mengakses berita, jadwal, dan informasi akademik siswa dan guru.</p>
                 </div>
             </div>
+
             <div class="col-12 col-lg-6 bg-white">
                 <div class="auth-form-wrap">
                     <div class="text-center mb-4">
@@ -52,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form method="POST" action="login.php" class="needs-validation" novalidate>
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Masukkan username" required>
+                            <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Masukkan username" required autocomplete="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Masukkan password" required>
+                            <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Masukkan password" required autocomplete="current-password">
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-4 small text-muted">
                             <div class="form-check">
@@ -69,9 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </form>
 
                     <div class="mt-4 text-center small text-muted">
-                        Demo login:<br>
-                        admin / admin123<br>
-                        siswa / siswa123
+                        <div class="fw-semibold mb-1">Demo login:</div>
+                        <div>admin / admin123</div>
+                        <div>siswa / siswa123</div>
                     </div>
 
                     <div class="mt-4 text-center">
